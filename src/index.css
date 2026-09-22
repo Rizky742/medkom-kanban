@@ -1,0 +1,593 @@
+@import "tailwindcss";
+
+/*
+ * Medkom Tracker — Jira-style theme.
+ * Radius system: 3px for interactive elements (buttons, inputs, lozenges),
+ * 8px for containers (panels, dialogs, columns).
+ * Type: system stack (like Jira / Atlassian), base 14px, ink #172B4D.
+ */
+
+html,
+body {
+  background: #fff;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Noto Sans", Ubuntu, "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: inherit;
+}
+.font-mono2 {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid #0c66e4;
+  outline-offset: 1px;
+}
+
+/* ---------- panels & cards ---------- */
+.card {
+  background: #fff;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+}
+.card-hover:hover {
+  background: #fafbfc;
+}
+
+/* board card: white on gray column, subtle shadow */
+.jcard {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.25);
+  cursor: pointer;
+  /* di layar sentuh: biarkan jari scroll, jangan dianggap drag */
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+/* kartu asal saat sedang di-drag (sentuh) */
+.dragging-src {
+  opacity: 0.35;
+}
+.jcard:hover {
+  background: #f7f8fa;
+}
+
+/* kanban column */
+.jcol {
+  background: #f1f2f4;
+  border-radius: 8px;
+  touch-action: pan-x pan-y;
+}
+.kanban-col.drag-over {
+  outline: 2px dashed #0c66e4;
+  outline-offset: 2px;
+  background: #e9f2ff;
+}
+
+/* ---------- buttons (sistem modern: radius 6px, bayangan halus) ---------- */
+.btn-pine,
+.jbtn-primary,
+.btn-ghost,
+.jbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out, transform 0.1s ease-out, color 0.15s ease-out;
+}
+.btn-pine,
+.jbtn-primary {
+  background: #0c66e4;
+  color: #fff;
+  border: 1px solid #0c66e4;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.btn-pine:hover,
+.jbtn-primary:hover {
+  background: #0958d2;
+  border-color: #0958d2;
+  box-shadow: 0 3px 8px rgba(9, 30, 66, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+.btn-pine:active,
+.jbtn-primary:active {
+  background: #09326c;
+  border-color: #09326c;
+  box-shadow: none;
+  transform: translateY(0) scale(0.98);
+}
+.btn-ghost,
+.jbtn {
+  background: #fff;
+  color: #172b4d;
+  border: 1px solid #dcdfe4;
+  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.12);
+}
+.btn-ghost:hover,
+.jbtn:hover {
+  background: #f7f8fa;
+  border-color: #c1c7d0;
+  box-shadow: 0 3px 8px rgba(9, 30, 66, 0.16);
+  transform: translateY(-1px);
+}
+.btn-ghost:active,
+.jbtn:active {
+  background: #edeff2;
+  box-shadow: none;
+  transform: translateY(0) scale(0.98);
+}
+.btn-pine:disabled,
+.btn-ghost:disabled,
+.jbtn:disabled,
+.jbtn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* top-nav + icon buttons */
+.jtopnav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #44546f;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.jtopnav-btn:hover {
+  background: #f1f2f4;
+  color: #172b4d;
+}
+.jicon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #44546f;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  flex: none;
+}
+.jicon-btn:hover {
+  background: #f1f2f4;
+  color: #172b4d;
+}
+
+/* sidebar nav */
+.jnav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #44546f;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.jnav:hover {
+  background: #e9ebee;
+}
+.jnav.active {
+  background: #e9f2ff;
+  color: #0c66e4;
+  font-weight: 500;
+}
+.jnav-section {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #626f86;
+  padding: 12px 8px 4px;
+}
+
+/* ---------- status lozenges ---------- */
+.jloz {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-radius: 3px;
+  padding: 2px 6px;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.jloz-gray { background: #dcdfe4; color: #44546f; }
+.jloz-blue { background: #cce0ff; color: #0c53b7; }
+.jloz-green { background: #baf3db; color: #216e4e; }
+.jloz-red { background: #ffd2cc; color: #ae2e24; }
+.jloz-yellow { background: #f8e6a0; color: #7f5f01; }
+
+/* generic count / tag pill */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 1px 6px;
+  background: #f1f2f4;
+  color: #44546f;
+  white-space: nowrap;
+}
+/* pill di atas background abu (header kolom) */
+.badge-solid {
+  background: #fff;
+  border: 1px solid #dcdfe4;
+}
+
+/* ---------- forms ---------- */
+.input {
+  width: 100%;
+  height: 32px;
+  background: #fafbfc;
+  border: 2px solid #dfe1e6;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #172b4d;
+  outline: none;
+}
+.input:hover {
+  background: #ebecf0;
+}
+.input:focus {
+  background: #fff;
+  border-color: #0c66e4;
+}
+textarea.input {
+  height: auto;
+  min-height: 72px;
+  padding: 8px;
+}
+select.input {
+  padding: 0 8px;
+}
+/* inline variant: select di baris filter (tidak full-width) */
+.input-inline {
+  width: auto;
+}
+
+/* search field modern: ikon menyatu, abu-abu, fokus memutih */
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px;
+  background: #f1f2f4;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  color: #626f86;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out, color 0.15s ease-out;
+}
+.search-field:hover {
+  background: #e9ebee;
+}
+.search-field:focus-within {
+  background: #fff;
+  border-color: #0c66e4;
+  box-shadow: 0 0 0 1px #0c66e4;
+  color: #0c66e4;
+}
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #172b4d;
+}
+.search-field input::placeholder {
+  color: #8590a2;
+}
+label.lbl,
+.lbl {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #44546f;
+}
+
+/* status pill yang berupa <select>: samarkan border bawaan browser */
+select.jloz {
+  border-color: transparent;
+}
+
+/* ikon kecil (header gadget) */
+.jicon-btn-sm {
+  width: 28px;
+  height: 28px;
+}
+
+/* transisi modern yang kalem */
+.jtopnav-btn,
+.jicon-btn,
+.jnav,
+.jcard,
+.card-hover {
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
+    color 0.15s ease-out, transform 0.1s ease-out;
+}
+.jicon-btn:active {
+  transform: scale(0.93);
+}
+.input,
+.portal-input {
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out;
+}
+
+/* ---------- type, links, tables ---------- */
+.jkey {
+  font-size: 12px;
+  color: #626f86;
+}
+a.jkey:hover {
+  color: #0c66e4;
+  text-decoration: underline;
+}
+.jlink {
+  color: #0c66e4;
+  cursor: pointer;
+}
+.jlink:hover {
+  text-decoration: underline;
+}
+.jcrumb {
+  font-size: 12px;
+  color: #626f86;
+}
+.jcrumb button:hover {
+  text-decoration: underline;
+}
+.jtable-row {
+  border-bottom: 1px solid #dcdfe4;
+}
+.jtable-row:hover {
+  background: #f7f8fa;
+}
+
+/* dialog overlay */
+.joverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: rgba(9, 30, 66, 0.54);
+  padding: 48px 16px 16px;
+  overflow-y: auto;
+}
+
+/* thin scrollbars */
+.scroll-thin {
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #c1c7d0;
+  border-radius: 8px;
+}
+
+/* ---------- mobile fixes ---------- */
+@media (max-width: 640px) {
+  /* cegah auto-zoom iOS saat input disentuh */
+  .input,
+  .portal-input,
+  .search-field input {
+    font-size: 16px;
+  }
+  /* dialog jadi lembaran penuh yang nyaman di HP */
+  .joverlay {
+    padding: 12px 8px;
+  }
+}
+
+/* ============================================================
+ * PORTAL KREATIF (halaman Request & Lacak — terpisah dari Jira)
+ * Gaya stiker: kertas krem, bingkai tinta tebal, bayangan keras,
+ * aksen coral + kuning + teal. Font: Plus Jakarta Sans.
+ * ============================================================ */
+.portal {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #fff7ea;
+  color: #23201a;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.portal-display {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+.portal-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff7ea;
+  border-bottom: 2px solid #23201a;
+}
+.portal-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #ff5a36;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 19px;
+  border: 2px solid #23201a;
+  box-shadow: 2px 2px 0 #23201a;
+  flex: none;
+}
+.portal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #23201a;
+  color: #fff7ea;
+  border: 2px solid #23201a;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(35, 32, 26, 0.25);
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+  white-space: nowrap;
+}
+.portal-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(35, 32, 26, 0.25);
+}
+.portal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.portal-btn-coral {
+  background: #ff5a36;
+  color: #fff;
+}
+.portal-btn-light {
+  background: #fff;
+  color: #23201a;
+  box-shadow: 3px 3px 0 #23201a;
+}
+.portal-card {
+  background: #fff;
+  border: 2px solid #23201a;
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 #23201a;
+}
+.portal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 2px solid #23201a;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  background: #fff;
+}
+.portal-chip-sun { background: #ffc42e; }
+.portal-chip-teal { background: #0e7c6b; color: #fff; }
+.portal-chip-coral { background: #ff5a36; color: #fff; }
+.portal-input {
+  width: 100%;
+  border: 2px solid #23201a;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: #23201a;
+  outline: none;
+}
+.portal-input:focus {
+  box-shadow: 0 0 0 3px #ffc42e;
+}
+/* varian besar untuk kolom pencarian */
+.portal-input-lg {
+  border-radius: 999px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+textarea.portal-input {
+  min-height: 84px;
+  resize: vertical;
+}
+.portal-label {
+  font-weight: 700;
+  font-size: 14px;
+}
+.portal-hint {
+  font-size: 13px;
+  color: #6e6257;
+  margin-top: 2px;
+}
+.portal-section-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: #23201a;
+  color: #ffc42e;
+  font-weight: 800;
+  font-size: 15px;
+  flex: none;
+}
+.portal-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 12px;
+  border: 2px solid #23201a;
+  white-space: nowrap;
+}
+.ticket-dash {
+  border-top: 2px dashed rgba(35, 32, 26, 0.35);
+}
+.ticket-barcode {
+  height: 46px;
+  border-radius: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #23201a 0 3px,
+    transparent 3px 6px,
+    #23201a 6px 7px,
+    transparent 7px 12px
+  );
+}
+.portal-footer {
+  border-top: 2px solid #23201a;
+  background: #23201a;
+  color: #fff7ea;
+}
