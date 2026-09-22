@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ADMINS, MEMBERS } from "../lib/store.js";
 import { login } from "../lib/auth.js";
+import { memberRole, teamMembers } from "../lib/team.js";
 import { Logo } from "../components/jira.jsx";
 
 export default function Login({ onDone, go }) {
-  const [name, setName] = useState(MEMBERS[0]);
+  const members = teamMembers();
+  const [name, setName] = useState(members[0] || "");
   const [pin, setPin] = useState("");
   const [err, setErr] = useState("");
 
@@ -16,23 +17,23 @@ export default function Login({ onDone, go }) {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-[#FAFBFC] px-4 py-8">
+    <div className="flex flex-1 items-center justify-center bg-[#FAFAFA] px-4 py-8">
       <form onSubmit={submit} className="card w-full max-w-[380px] p-6">
         <div className="flex items-center gap-2">
           <Logo size={30} />
-          <span className="text-[16px] font-semibold tracking-tight">Medkom Tracker</span>
+          <span className="font-display text-[16px]">Medkom Tracker</span>
         </div>
-        <h1 className="mt-4 text-[20px] font-medium">Log in</h1>
-        <p className="mt-0.5 text-[13px] text-[#626F86]">
+        <h1 className="font-display mt-4 text-[24px]">Log in</h1>
+        <p className="mt-0.5 text-[13px] text-[#6B6B6B]">
           Area khusus tim Medkom. Pilih namamu lalu masukkan PIN.
         </p>
         <div className="mt-4 space-y-3">
           <div>
             <p className="lbl">Nama</p>
             <select className="input mt-1" value={name} onChange={(e) => setName(e.target.value)}>
-              {MEMBERS.map((m) => (
+              {members.map((m) => (
                 <option key={m} value={m}>
-                  {m} {ADMINS.includes(m) ? "· Admin" : ""}
+                  {m} {memberRole(m) === "admin" ? "· Admin" : ""}
                 </option>
               ))}
             </select>
@@ -52,8 +53,8 @@ export default function Login({ onDone, go }) {
               }}
             />
           </div>
-          {err && <p className="text-[13px] font-medium text-[#AE2E24]">{err}</p>}
-          <button type="submit" className="btn-pine h-9 w-full text-sm">
+          {err && <p className="text-[13px] font-medium text-[#EF4444]">{err}</p>}
+          <button type="submit" className="btn-pine h-11 w-full text-sm">
             Log in
           </button>
         </div>

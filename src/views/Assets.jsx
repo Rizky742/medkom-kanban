@@ -29,8 +29,8 @@ export default function Assets({ db, setDb, me, isAdmin }) {
       <p className="jcrumb">Medkom 2026</p>
       <div className="mt-0.5 flex items-center justify-between">
         <div>
-          <h1 className="text-[24px] font-medium tracking-tight">Galeri Hasil</h1>
-          <p className="text-[13px] text-[#626F86]">Klik gambar untuk memeriksa, meminta revisi, atau menyetujui.</p>
+          <h1 className="font-display text-[32px]">Galeri Hasil</h1>
+          <p className="text-[13px] text-[#6B6B6B]">Klik gambar untuk memeriksa, meminta revisi, atau menyetujui.</p>
         </div>
         <span className="jkey">{list.length} gambar</span>
       </div>
@@ -40,8 +40,8 @@ export default function Assets({ db, setDb, me, isAdmin }) {
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
-            className={`rounded-md px-2.5 py-1 text-[13px] font-medium ${
-              filter === f.id ? "bg-[#E9F2FF] text-[#0C66E4]" : "text-[#44546F] hover:bg-[#F1F2F4]"
+            className={`rounded-full px-3 py-1 text-[12px] font-medium ${
+              filter === f.id ? "bg-[#6366F1] text-white" : "bg-[#F4F4F6] text-[#6B6B6B] hover:bg-[#ECECF0]"
             }`}
           >
             {f.label}
@@ -55,17 +55,17 @@ export default function Assets({ db, setDb, me, isAdmin }) {
         </div>
       )}
 
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((t) => (
-          <button key={t.id} onClick={() => setOpen(t.id)} className="card overflow-hidden text-left hover:bg-[#FAFBFC]">
+          <button key={t.id} onClick={() => setOpen(t.id)} className="card card-hover overflow-hidden text-left">
             <img src={thumb(t.id, 600, 340)} alt={t.title} className="h-36 w-full object-cover" loading="lazy" />
-            <div className="p-3">
+            <div className="p-4">
               <div className="flex items-center justify-between gap-2">
                 <span className="jkey font-medium">{t.id}</span>
                 <StatusBadge s={t.status} />
               </div>
-              <p className="mt-1 text-[14px] font-medium leading-snug">{t.title}</p>
-              <div className="mt-2 flex items-center gap-2 text-[12px] text-[#626F86]">
+              <p className="font-display mt-1 text-[15px] leading-snug">{t.title}</p>
+              <div className="mt-2 flex items-center gap-2 text-[12px] text-[#6B6B6B]">
                 <Avatar name={t.pic} size={20} /> {t.pic} · v{t.versi} {t.cetak && "· cetak"}
               </div>
             </div>

@@ -1,78 +1,117 @@
 @import "tailwindcss";
 
 /*
- * Medkom Tracker — Jira-style theme.
- * Radius system: 3px for interactive elements (buttons, inputs, lozenges),
- * 8px for containers (panels, dialogs, columns).
- * Type: system stack (like Jira / Atlassian), base 14px, ink #172B4D.
+ * Genesis — editorial precision interface (area manajemen /app/*).
+ * Token: Primary #6366F1 / Hover #4F46E5, BG #FAFAFA, Surface #FFFFFF,
+ * Text #0A0A0A / #6B6B6B / Muted #9C9C9C, Border #E8E8EC,
+ * Success #10B981, Warning #F59E0B, Error #EF4444.
+ * Display: General Sans 700, Body: DM Sans 400/500, Code: JetBrains Mono.
+ * Radius: 4 chips/tags, 6 buttons/inputs, 8 panels/dropdowns,
+ * 12 cards/search, 9999 avatars/pills.
  */
+
+:root {
+  --gen-primary: #6366f1;
+  --gen-primary-hover: #4f46e5;
+  --gen-bg: #fafafa;
+  --gen-surface: #ffffff;
+  --gen-text: #0a0a0a;
+  --gen-text-2: #6b6b6b;
+  --gen-muted: #9c9c9c;
+  --gen-border: #e8e8ec;
+  --gen-success: #10b981;
+  --gen-warning: #f59e0b;
+  --gen-error: #ef4444;
+  --gen-ring: rgba(99, 102, 241, 0.12);
+  --gen-display: "General Sans", "DM Sans", system-ui, sans-serif;
+  --gen-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gen-mono: "JetBrains Mono", ui-monospace, monospace;
+}
 
 html,
 body {
-  background: #fff;
-  color: #172b4d;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Noto Sans", Ubuntu, "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.45;
+  background: var(--gen-bg);
+  color: var(--gen-text);
+  font-family: var(--gen-body);
+  font-size: 15px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
-  font-family: inherit;
+  font-family: var(--gen-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 .font-mono2 {
-  font-family: inherit;
+  font-family: var(--gen-mono);
+}
+
+h1, h2, h3 {
+  font-family: var(--gen-display);
+  letter-spacing: -0.03em;
+  color: var(--gen-text);
+}
+
+code, kbd, pre {
+  font-family: var(--gen-mono);
 }
 
 :focus-visible {
-  outline: 2px solid #0c66e4;
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--gen-ring);
+  border-color: var(--gen-primary);
 }
 
-/* ---------- panels & cards ---------- */
+/* ---------- panels & cards (Genesis: flat, border 1px, radius 12) ---------- */
 .card {
-  background: #fff;
-  border: 1px solid #dcdfe4;
-  border-radius: 8px;
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 12px;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
 }
 .card-hover:hover {
-  background: #fafbfc;
+  background: var(--gen-surface);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
-/* board card: white on gray column, subtle shadow */
+/* board card: surface di atas kolom, flat + lift saat hover */
 .jcard {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.25);
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 12px;
   cursor: pointer;
   /* di layar sentuh: biarkan jari scroll, jangan dianggap drag */
   touch-action: pan-x pan-y;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
 }
 /* kartu asal saat sedang di-drag (sentuh) */
 .dragging-src {
   opacity: 0.35;
 }
 .jcard:hover {
-  background: #f7f8fa;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 /* kanban column */
 .jcol {
-  background: #f1f2f4;
-  border-radius: 8px;
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 12px;
   touch-action: pan-x pan-y;
 }
 .kanban-col.drag-over {
-  outline: 2px dashed #0c66e4;
+  outline: 2px dashed var(--gen-primary);
   outline-offset: 2px;
-  background: #e9f2ff;
+  background: #eef0ff;
 }
 
-/* ---------- buttons (sistem modern: radius 6px, bayangan halus) ---------- */
+/* ---------- buttons (Genesis: radius 6, primary indigo) ---------- */
 .btn-pine,
 .jbtn-primary,
 .btn-ghost,
@@ -84,52 +123,47 @@ body {
   border-radius: 6px;
   font-weight: 500;
   font-size: 14px;
+  font-family: var(--gen-body);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
-    box-shadow 0.15s ease-out, transform 0.1s ease-out, color 0.15s ease-out;
+  transition: background-color 200ms ease-out, border-color 200ms ease-out,
+    box-shadow 200ms ease-out, transform 200ms ease-out, color 200ms ease-out;
 }
 .btn-pine,
 .jbtn-primary {
-  background: #0c66e4;
+  background: var(--gen-primary);
   color: #fff;
-  border: 1px solid #0c66e4;
-  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--gen-primary);
 }
 .btn-pine:hover,
 .jbtn-primary:hover {
-  background: #0958d2;
-  border-color: #0958d2;
-  box-shadow: 0 3px 8px rgba(9, 30, 66, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: var(--gen-primary-hover);
+  border-color: var(--gen-primary-hover);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
   transform: translateY(-1px);
 }
 .btn-pine:active,
 .jbtn-primary:active {
-  background: #09326c;
-  border-color: #09326c;
+  background: var(--gen-primary-hover);
+  border-color: var(--gen-primary-hover);
   box-shadow: none;
   transform: translateY(0) scale(0.98);
 }
 .btn-ghost,
 .jbtn {
-  background: #fff;
-  color: #172b4d;
-  border: 1px solid #dcdfe4;
-  box-shadow: 0 1px 2px rgba(9, 30, 66, 0.12);
+  background: transparent;
+  color: var(--gen-text);
+  border: 1px solid var(--gen-border);
 }
 .btn-ghost:hover,
 .jbtn:hover {
-  background: #f7f8fa;
-  border-color: #c1c7d0;
-  box-shadow: 0 3px 8px rgba(9, 30, 66, 0.16);
+  background: #f4f4f6;
+  border-color: #d9d9e0;
   transform: translateY(-1px);
 }
 .btn-ghost:active,
 .jbtn:active {
-  background: #edeff2;
-  box-shadow: none;
+  background: #ececf0;
   transform: translateY(0) scale(0.98);
 }
 .btn-pine:disabled,
@@ -142,7 +176,7 @@ body {
   box-shadow: none;
 }
 
-/* top-nav + icon buttons */
+/* top-nav + icon buttons (Genesis nav: 56px, backdrop-blur) */
 .jtopnav-btn {
   display: inline-flex;
   align-items: center;
@@ -152,15 +186,15 @@ body {
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #44546f;
+  color: var(--gen-text-2);
   background: transparent;
   border: none;
   cursor: pointer;
   white-space: nowrap;
 }
 .jtopnav-btn:hover {
-  background: #f1f2f4;
-  color: #172b4d;
+  background: #f4f4f6;
+  color: var(--gen-text);
 }
 .jicon-btn {
   display: inline-flex;
@@ -168,8 +202,8 @@ body {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  color: #44546f;
+  border-radius: 9999px;
+  color: var(--gen-text-2);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -177,98 +211,104 @@ body {
   flex: none;
 }
 .jicon-btn:hover {
-  background: #f1f2f4;
-  color: #172b4d;
+  background: #f4f4f6;
+  color: var(--gen-text);
 }
 
-/* sidebar nav */
+/* sidebar nav (Genesis: 14px medium, hover bg-alt) */
 .jnav {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 32px;
-  padding: 4px 8px;
+  min-height: 38px;
+  padding: 8px 12px;
   border-radius: 6px;
   font-size: 14px;
-  color: #44546f;
+  font-weight: 500;
+  color: var(--gen-text-2);
   background: transparent;
   border: none;
   cursor: pointer;
   text-align: left;
 }
 .jnav:hover {
-  background: #e9ebee;
+  background: #f4f4f6;
+  color: var(--gen-text);
 }
 .jnav.active {
-  background: #e9f2ff;
-  color: #0c66e4;
+  background: #eef0ff;
+  color: var(--gen-primary);
   font-weight: 500;
 }
 .jnav-section {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #626f86;
+  letter-spacing: 0.06em;
+  color: var(--gen-muted);
   padding: 12px 8px 4px;
 }
 
-/* ---------- status lozenges ---------- */
+/* ---------- status chips (Genesis: pill, semantik) ---------- */
 .jloz {
   display: inline-flex;
   align-items: center;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  border-radius: 3px;
-  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 4px 12px;
   white-space: nowrap;
-  line-height: 1.5;
+  line-height: 1.4;
 }
-.jloz-gray { background: #dcdfe4; color: #44546f; }
-.jloz-blue { background: #cce0ff; color: #0c53b7; }
-.jloz-green { background: #baf3db; color: #216e4e; }
-.jloz-red { background: #ffd2cc; color: #ae2e24; }
-.jloz-yellow { background: #f8e6a0; color: #7f5f01; }
+.jloz-gray { background: #f4f4f6; color: #6b6b6b; }
+.jloz-blue { background: #eef0ff; color: #4f46e5; }
+.jloz-green { background: #e8f8f1; color: #0c7a55; }
+.jloz-red { background: #fdecec; color: #c0362c; }
+.jloz-yellow { background: #fef5e2; color: #9a6b0a; }
 
-/* generic count / tag pill */
+/* generic count / tag pill (Genesis: 4px tags, pill status) */
 .badge {
   display: inline-flex;
   align-items: center;
-  font-size: 11px;
-  font-weight: 600;
-  border-radius: 3px;
-  padding: 1px 6px;
-  background: #f1f2f4;
-  color: #44546f;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 4px 12px;
+  background: #f4f4f6;
+  color: #6b6b6b;
   white-space: nowrap;
 }
 /* pill di atas background abu (header kolom) */
 .badge-solid {
-  background: #fff;
-  border: 1px solid #dcdfe4;
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 9999px;
 }
 
-/* ---------- forms ---------- */
+/* ---------- forms (Genesis: 1px border, 6px radius, 10x14 padding) ---------- */
 .input {
   width: 100%;
-  height: 32px;
-  background: #fafbfc;
-  border: 2px solid #dfe1e6;
+  min-height: 38px;
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
   border-radius: 6px;
-  padding: 4px 8px;
+  padding: 10px 14px;
   font-size: 14px;
-  color: #172b4d;
+  font-family: var(--gen-body);
+  color: var(--gen-text);
   outline: none;
 }
+.input::placeholder {
+  color: var(--gen-muted);
+}
 .input:hover {
-  background: #ebecf0;
+  border-color: #d9d9e0;
 }
 .input:focus {
-  background: #fff;
-  border-color: #0c66e4;
+  background: var(--gen-surface);
+  border-color: var(--gen-primary);
+  box-shadow: 0 0 0 3px var(--gen-ring);
 }
 textarea.input {
   height: auto;
@@ -283,28 +323,27 @@ select.input {
   width: auto;
 }
 
-/* search field modern: ikon menyatu, abu-abu, fokus memutih */
+/* search global (Genesis: rounded-xl 12px, badge ⌘K) */
 .search-field {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 36px;
-  padding: 0 12px;
-  background: #f1f2f4;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  color: #626f86;
-  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
-    box-shadow 0.15s ease-out, color 0.15s ease-out;
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 12px;
+  color: var(--gen-muted);
+  transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
 }
 .search-field:hover {
-  background: #e9ebee;
+  border-color: #d9d9e0;
 }
 .search-field:focus-within {
-  background: #fff;
-  border-color: #0c66e4;
-  box-shadow: 0 0 0 1px #0c66e4;
-  color: #0c66e4;
+  background: var(--gen-surface);
+  border-color: var(--gen-primary);
+  box-shadow: 0 0 0 3px var(--gen-ring);
+  color: var(--gen-primary);
 }
 .search-field input {
   flex: 1;
@@ -314,17 +353,27 @@ select.input {
   border: none;
   outline: none;
   font-size: 14px;
-  color: #172b4d;
+  color: var(--gen-text);
 }
 .search-field input::placeholder {
-  color: #8590a2;
+  color: var(--gen-muted);
+}
+.search-kbd {
+  font-family: var(--gen-mono);
+  font-size: 11px;
+  color: var(--gen-muted);
+  border: 1px solid var(--gen-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  background: var(--gen-bg);
 }
 label.lbl,
 .lbl {
   display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: #44546f;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gen-text);
+  margin-bottom: 8px;
 }
 
 /* status pill yang berupa <select>: samarkan border bawaan browser */
@@ -356,37 +405,41 @@ select.jloz {
     box-shadow 0.15s ease-out;
 }
 
-/* ---------- type, links, tables ---------- */
+/* ---------- type, links, tables (Genesis lists: rows 12x16, dividers) ---------- */
 .jkey {
   font-size: 12px;
-  color: #626f86;
+  font-family: var(--gen-mono);
+  color: var(--gen-muted);
 }
 a.jkey:hover {
-  color: #0c66e4;
+  color: var(--gen-primary);
   text-decoration: underline;
 }
 .jlink {
-  color: #0c66e4;
+  color: var(--gen-primary);
   cursor: pointer;
 }
 .jlink:hover {
   text-decoration: underline;
 }
 .jcrumb {
-  font-size: 12px;
-  color: #626f86;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gen-muted);
 }
 .jcrumb button:hover {
   text-decoration: underline;
 }
 .jtable-row {
-  border-bottom: 1px solid #dcdfe4;
+  border-bottom: 1px solid var(--gen-border);
 }
 .jtable-row:hover {
-  background: #f7f8fa;
+  background: #f4f4f6;
 }
 
-/* dialog overlay */
+/* dialog overlay + dropdown (Genesis: shadow-lg, radius 8) */
 .joverlay {
   position: fixed;
   inset: 0;
@@ -394,9 +447,15 @@ a.jkey:hover {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: rgba(9, 30, 66, 0.54);
+  background: rgba(10, 10, 10, 0.45);
   padding: 48px 16px 16px;
   overflow-y: auto;
+}
+.jdropdown {
+  background: var(--gen-surface);
+  border: 1px solid var(--gen-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 /* thin scrollbars */

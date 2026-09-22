@@ -3,13 +3,22 @@ import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import { Avatar, DueText, Empty, StatusBadge, safeHref } from "../components/ui.jsx";
 import { IssueTypeIcon } from "../components/jira.jsx";
 import IssueDialog from "../components/IssueDialog.jsx";
-import { MEMBERS, daysLeft, parentStatus } from "../lib/store.js";
+import { daysLeft, parentStatus } from "../lib/store.js";
+import { teamMembers } from "../lib/team.js";
+
+function pickMember(members, ...cands) {
+  for (const c of cands) {
+    if (c && members.includes(c)) return c;
+  }
+  return members[0] || "";
+}
 
 export default function Intake({ db, setDb, me, isAdmin }) {
   const [q, setQ] = useState("");
   const [splitFor, setSplitFor] = useState(null);
   const [openId, setOpenId] = useState(null);
-  const [parts, setParts] = useState([{ title: "", pic: MEMBERS[4], deadline: "", cetak: false }]);
+  const members = teamMembers();
+  const [parts, setParts] = useState([{ title: "", pic: members[4] || members[0] || "", deadline: "", cetak: false }]);
 
   function verify(reqId) {
     const existing = db.tasks.find((t) => t.reqId === reqId);
@@ -21,7 +30,7 @@ export default function Intake({ db, setDb, me, isAdmin }) {
       reqId,
       title: `${req.jenis[0]} ${req.proker}`,
       note: req.publishTarget[0] || "",
-      pic: MEMBERS[0],
+      pic: members[0] || me,
       deadline: req.deadlineAcara,
       status: "antri",
       cetak: false,
@@ -37,8 +46,8 @@ export default function Intake({ db, setDb, me, isAdmin }) {
   function openSplit(req) {
     setSplitFor(req);
     setParts([
-      { title: `${req.jenis[0]} ${req.proker} — versi feed`, pic: "Sovia", deadline: req.deadlineAcara, cetak: false },
-      { title: `${req.proker} — versi cetak`, pic: "Hannara", deadline: req.deadlineAcara, cetak: true },
+      { title: `${req.jenis[0]} ${req.proker} — versi feed`, pic: pickMember(members, "Sovia", members[0]), deadline: req.deadlineAcara, cetak: false },
+      { title: `${req.proker} — versi cetak`, pic: pickMember(members, "Hannara", members[1] || members[0]), deadline: req.deadlineAcara, cetak: true },
     ]);
   }
 
@@ -74,8 +83,8 @@ export default function Intake({ db, setDb, me, isAdmin }) {
   return (
     <div className="py-5">
       <p className="jcrumb">Medkom 2026</p>
-      <h1 className="mt-0.5 text-[24px] font-medium tracking-tight">Antrian Masuk</h1>
-      <p className="text-[13px] text-[#626F86]">Request baru dari divisi masuk ke sini. Cek brief-nya, lalu pecah jadi tugas untuk tiap anggota.</p>
+      <h1 className="font-display mt-0.5 text-[32px]">Antrian Masuk</h1>
+      <p className="text-[13px] text-[#6B6B6B]">Request baru dari divisi masuk ke sini. Cek brief-nya, lalu pecah jadi tugas untuk tiap anggota.</p>
 
       <div className="mt-3 flex items-center gap-2">
         <div className="search-field w-full sm:w-60">
@@ -85,11 +94,12 @@ export default function Intake({ db, setDb, me, isAdmin }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
+          <span className="search-kbd">⌘K</span>
         </div>
         <span className="jkey">{incoming.length} request</span>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 space-y-5">
         {incoming.length === 0 && (
           <Empty title="Belum ada request" hint="Request baru dari divisi akan muncul di sini untuk diverifikasi." />
         )}
@@ -97,12 +107,12 @@ export default function Intake({ db, setDb, me, isAdmin }) {
           const kids = db.tasks.filter((t) => t.reqId === r.id);
           const ps = parentStatus(r.id, db.tasks);
           return (
-            <div key={r.id} className="card overflow-hidden">
+            <div key={r.id} className="card card-hover overflow-hidden">
               {/* request group header */}
-              <div className="flex flex-wrap items-center gap-2 bg-[#FAFBFC] px-3 py-2">
+              <div className="flex flex-wrap items-center gap-2 border-b border-[#E8E8EC] px-4 py-3">
                 <IssueTypeIcon kind="story" size={16} />
                 <span className="jkey font-medium">{r.id}</span>
-                <span className="text-[14px] font-semibold">{r.proker}</span>
+                <span className="font-display text-[15px]">{r.proker}</span>
                 <StatusBadge s={ps} />
                 <span className="badge">{r.divisi}</span>
                 <span className="badge">{kids.length} tugas</span>
@@ -120,7 +130,7 @@ export default function Intake({ db, setDb, me, isAdmin }) {
                   )}
                 </span>
               </div>
-              <p className="border-t border-[#DCDFE4] px-3 py-2 text-[13px] text-[#44546F]">
+              <p className="px-4 py-3 text-[13px] text-[#6B6B6B]">
                 PIC {r.pic} ({r.wa}) · {r.jenis.join(", ")} · {r.deskripsi}
                 {r.asetMasuk.length > 0 && safeHref(r.asetMasuk[0]) && (
                   <>
@@ -136,11 +146,11 @@ export default function Intake({ db, setDb, me, isAdmin }) {
                 <button
                   key={t.id}
                   onClick={() => setOpenId(t.id)}
-                  className="jtable-row flex w-full items-center gap-2 px-3 py-2 text-left hover:bg-[#F7F8FA]"
+                  className="jtable-row flex w-full items-center gap-2 px-4 py-3 text-left"
                 >
                   <IssueTypeIcon kind="task" size={16} />
                   <span className="jkey hidden sm:inline">{t.id}</span>
-                  <span className="min-w-0 flex-1 truncate text-[14px]">{t.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-[15px]">{t.title}</span>
                   {t.cetak && <span className="badge">cetak</span>}
                   <span className="hidden sm:inline">
                     <DueText deadline={t.deadline} dl={daysLeft(t.deadline)} />
@@ -150,7 +160,7 @@ export default function Intake({ db, setDb, me, isAdmin }) {
                 </button>
               ))}
               {kids.length === 0 && (
-                <p className="px-3 py-3 text-[13px] text-[#626F86]">
+                <p className="px-4 py-3 text-[13px] text-[#6B6B6B]">
                   Belum ada tugas. {isAdmin ? "Klik Verifikasi atau Pecah tugas untuk membagi ke anggota." : "Menunggu verifikasi Admin."}
                 </p>
               )}
@@ -162,16 +172,16 @@ export default function Intake({ db, setDb, me, isAdmin }) {
       {/* split dialog */}
       {splitFor && (
         <div className="joverlay" onClick={() => setSplitFor(null)}>
-          <div className="card max-h-[92dvh] w-full max-w-[640px] overflow-y-auto rounded-lg p-4 shadow-[0_12px_40px_rgba(9,30,66,0.3)] sm:p-5" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-[20px] font-medium">Pecah {splitFor.id}</h2>
-            <p className="text-[13px] text-[#626F86]">{splitFor.proker} — 1 kartu = 1 tugas = 1 anggota.</p>
+          <div className="card max-h-[92dvh] w-full max-w-[640px] overflow-y-auto p-4 sm:p-5" onClick={(e) => e.stopPropagation()}>
+            <h2 className="font-display text-[24px]">Pecah {splitFor.id}</h2>
+            <p className="text-[13px] text-[#6B6B6B]">{splitFor.proker} — 1 kartu = 1 tugas = 1 anggota.</p>
             <div className="mt-4 space-y-3">
               {parts.map((p, i) => (
-                <div key={i} className="rounded-lg border border-[#DCDFE4] bg-[#FAFBFC] p-3">
+                <div key={i} className="rounded-lg border border-[#E8E8EC] bg-[#FAFAFA] p-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-[13px] font-semibold">Tugas {i + 1}</p>
+                    <p className="text-[13px] font-medium">Tugas {i + 1}</p>
                     <button
-                      className="text-[13px] font-medium text-[#AE2E24] hover:underline"
+                      className="text-[13px] font-medium text-[#EF4444] hover:underline"
                       onClick={() => setParts(parts.filter((_, j) => j !== i))}
                     >
                       Hapus
@@ -194,7 +204,7 @@ export default function Intake({ db, setDb, me, isAdmin }) {
                         value={p.pic}
                         onChange={(e) => setParts(parts.map((x, j) => (j === i ? { ...x, pic: e.target.value } : x)))}
                       >
-                        {MEMBERS.map((m) => (
+                        {members.map((m) => (
                           <option key={m}>{m}</option>
                         ))}
                       </select>
@@ -221,7 +231,7 @@ export default function Intake({ db, setDb, me, isAdmin }) {
               ))}
               <button
                 className="jbtn h-10 w-full text-[13px] sm:h-8"
-                onClick={() => setParts([...parts, { title: "", pic: MEMBERS[0], deadline: splitFor.deadlineAcara, cetak: false }])}
+                onClick={() => setParts([...parts, { title: "", pic: members[0] || "", deadline: splitFor.deadlineAcara, cetak: false }])}
               >
                 <Plus size={14} weight="bold" /> Tambah tugas
               </button>

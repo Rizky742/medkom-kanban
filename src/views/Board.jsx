@@ -3,7 +3,8 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import { Avatar, DueText, Empty } from "../components/ui.jsx";
 import { IssueTypeIcon, PriorityIcon } from "../components/jira.jsx";
 import IssueDialog from "../components/IssueDialog.jsx";
-import { BOARD_COLS, MEMBERS, STATUSES, daysLeft } from "../lib/store.js";
+import { BOARD_COLS, STATUSES, daysLeft } from "../lib/store.js";
+import { teamMembers } from "../lib/team.js";
 
 const COL_LABEL = Object.fromEntries(STATUSES.map((s) => [s.id, s.label]));
 
@@ -11,6 +12,7 @@ export default function Board({ db, setDb, me, isAdmin }) {
   const [q, setQ] = useState("");
   const [fPic, setFPic] = useState("Semua");
   const [openId, setOpenId] = useState(null);
+  const members = teamMembers();
 
   /* drag kartu cuma untuk mouse; di HP, jari dipakai buat swipe */
   const canDrag =
@@ -152,9 +154,9 @@ export default function Board({ db, setDb, me, isAdmin }) {
   return (
     <div className="flex h-full min-h-0 flex-col py-5">
       <p className="jcrumb">Medkom 2026</p>
-      <h1 className="mt-0.5 text-[24px] font-medium tracking-tight">Papan Tugas</h1>
-      <p className="hidden text-[13px] text-[#626F86] sm:block">Geser kartu ke kanan kalau progres berubah. Klik kartu untuk detail dan komentar.</p>
-      <p className="text-[13px] text-[#626F86] sm:hidden">Tahan kartu untuk menggeser antar kolom, ketuk untuk detail & komentar.</p>
+      <h1 className="font-display mt-0.5 text-[32px]">Papan Tugas</h1>
+      <p className="hidden text-[13px] text-[#6B6B6B] sm:block">Geser kartu ke kanan kalau progres berubah. Klik kartu untuk detail dan komentar.</p>
+      <p className="text-[13px] text-[#6B6B6B] sm:hidden">Tahan kartu untuk menggeser antar kolom, ketuk untuk detail & komentar.</p>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <div className="search-field w-full sm:w-60">
@@ -164,10 +166,11 @@ export default function Board({ db, setDb, me, isAdmin }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
+          <span className="search-kbd">⌘K</span>
         </div>
         <select className="input input-inline text-[13px]" value={fPic} onChange={(e) => setFPic(e.target.value)}>
           <option value="Semua">Semua anggota</option>
-          {MEMBERS.map((m) => (
+          {members.map((m) => (
             <option key={m}>{m}</option>
           ))}
         </select>
@@ -180,7 +183,7 @@ export default function Board({ db, setDb, me, isAdmin }) {
         </div>
       )}
 
-      <div ref={scrollRef} className="scroll-thin mt-3 flex min-h-0 flex-1 items-start gap-2 overflow-x-auto pb-2 max-sm:snap-x">
+      <div ref={scrollRef} className="scroll-thin mt-3 flex min-h-0 flex-1 items-start gap-5 overflow-x-auto pb-2 max-sm:snap-x">
         {BOARD_COLS.map((col) => {
           const items = list.filter((t) =>
             t.status === col || (col === "antri" && (t.status === "verifikasi" || t.status === "masuk"))
@@ -202,10 +205,10 @@ export default function Board({ db, setDb, me, isAdmin }) {
                 if (id) move(id, col);
               }}
             >
-              <p className="flex items-center justify-between px-1.5 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-[#44546F]">
+              <p className="flex items-center justify-between px-1.5 py-1.5 text-[11px] font-medium uppercase tracking-wide text-[#6B6B6B]">
                 {COL_LABEL[col]} <span className="badge badge-solid">{items.length}</span>
               </p>
-              <div className="scroll-thin min-h-0 flex-1 space-y-1.5 overflow-y-auto pr-0.5">
+              <div className="scroll-thin min-h-0 flex-1 space-y-2 overflow-y-auto pr-0.5">
                 {items.map((t) => {
                   const dl = daysLeft(t.deadline);
                   return (
@@ -215,9 +218,9 @@ export default function Board({ db, setDb, me, isAdmin }) {
                       draggable={canDrag}
                       onDragStart={(e) => e.dataTransfer.setData("text/plain", t.id)}
                       onClick={() => setOpenId(t.id)}
-                      className="jcard p-2.5"
+                      className="jcard p-3"
                     >
-                      <p className="text-[14px] leading-snug">{t.title}</p>
+                      <p className="text-[15px] leading-snug">{t.title}</p>
                       {t.cetak && (
                         <p className="mt-1">
                           <span className="badge">cetak</span>

@@ -1,58 +1,31 @@
-import { ADMINS, MEMBERS } from "./store.js";
+import { getPin, memberRole, teamMembers } from "./team.js";
+
+export { DEFAULT_ADMIN_PIN as ADMIN_PIN, DEFAULT_MEMBER_PIN as MEMBER_PIN } from "./team.js";
 
 /* ============================================================
- * Kunci internal: tiap anggota pilih nama + masukkan PIN.
- * Admin (Rizky, Vita, Fayola, Lina) pakai ADMIN_PIN,
- * anggota lain pakai MEMBER_PIN.
+ * Login PIN per anggota. Daftar anggota + PIN dikelola di
+ * Team (localStorage medkom_team_v1, default dari env
+ * VITE_ADMIN_PIN / VITE_MEMBER_PIN).
  *
- * PIN dibaca dari env (VITE_ADMIN_PIN / VITE_MEMBER_PIN) agar
- * tidak wajib hardcoded di repo publik. Fallback ke bawaan
- * hanya untuk dev lokal — GANTI sebelum disebar ke tim
- * (set via Vercel Project Settings > Environment Variables).
  * Catatan jujur: ini kunci sederhana level prototype (cek di
- * browser), bukan login bank. Cukup untuk menahan pengunjung
- * iseng + membedakan hak Admin vs Anggota. Session kedaluwarsa
- * 30 hari. Login Google beneran bisa dipasang nanti (butuh setup
- * OAuth di akun genbiunair26@gmail.com).
+ * browser), bukan login bank. Session kedaluwarsa 30 hari.
  * ============================================================ */
-function envPin(key, fallback) {
-  try {
-    const v =
-      typeof import.meta !== "undefined" && import.meta.env
-        ? import.meta.env[key]
-        : null;
-    if (v && String(v).trim()) return String(v).trim();
-  } catch {
-    /* abaikan */
-  }
-  return fallback;
-}
-
-export const ADMIN_PIN = envPin("VITE_ADMIN_PIN", "654321");
-export const MEMBER_PIN = envPin("VITE_MEMBER_PIN", "123456");
-
-if (
-  typeof import.meta !== "undefined" &&
-  import.meta.env &&
-  import.meta.env.DEV &&
-  (ADMIN_PIN === "654321" || MEMBER_PIN === "123456")
-) {
-  console.warn(
-    "[medkom] PIN bawaan dipakai (dev only). Set VITE_ADMIN_PIN/VITE_MEMBER_PIN sebelum production."
-  );
-}
 
 const SESSION_KEY = "medkom_session";
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
 export function login(name, pin) {
-  if (!MEMBERS.includes(name)) return { ok: false, error: "Nama tidak terdaftar di tim." };
-  const need = ADMINS.includes(name) ? ADMIN_PIN : MEMBER_PIN;
+  const members = teamMembers();
+  const found = members.find(
+    (m) => m.toLowerCase() === String(name || "").toLowerCase()
+  );
+  if (!found) return { ok: false, error: "Nama tidak terdaftar di tim." };
+  const need = getPin(found);
   if (String(pin || "").trim() !== need)
     return { ok: false, error: "PIN salah. Tanya PIN ke admin Medkom." };
   const session = {
-    name,
-    role: ADMINS.includes(name) ? "admin" : "anggota",
+    name: found,
+    role: memberRole(found) === "admin" ? "admin" : "anggota",
     ts: Date.now(),
   };
   try {
@@ -68,7 +41,13 @@ export function getSession() {
     const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
     const s = JSON.parse(raw);
-    if (!s || !MEMBERS.includes(s.name)) return null;
+    if (!s || !s.name) return null;
+    // nama harus masih terdaftar (bisa dihapus admin)
+    const members = teamMembers();
+    const found = members.find(
+      (m) => m.toLowerCase() === String(s.name).toLowerCase()
+    );
+    if (!found) return null;
     if (s.ts && Date.now() - Number(s.ts) > SESSION_TTL_MS) {
       try {
         localStorage.removeItem(SESSION_KEY);
@@ -77,10 +56,25 @@ export function getSession() {
       }
       return null;
     }
-    return { name: s.name, role: ADMINS.includes(s.name) ? "admin" : "anggota", ts: s.ts };
+    // role selalu ikut data tim terbaru (bisa diubah admin)
+    return {
+      name: found,
+      role: memberRole(found) === "admin" ? "admin" : "anggota",
+      ts: s.ts,
+    };
   } catch {
     return null;
   }
+}
+
+export function refreshSession() {
+  const s = getSession();
+  try {
+    if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+  } catch {
+    /* abaikan */
+  }
+  return s;
 }
 
 export function clearSession() {

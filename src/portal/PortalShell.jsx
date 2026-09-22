@@ -36,7 +36,7 @@ export default function PortalShell({ go, children }) {
       <footer className="portal-footer">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-6">
           <p className="text-[14px] font-bold">Medkom Kreatif · GenBI UNAIR 2026</p>
-          <p className="text-[13px] text-[#d8cdb8]">Dikerjakan dengan teliti oleh Divisi Media & Komunikasi.</p>
+          <p className="text-[13px] text-[#d8cdb8]">Made by medkom with love ❤️</p>
         </div>
       </footer>
     </div>

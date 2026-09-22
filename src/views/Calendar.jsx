@@ -24,9 +24,10 @@ export default function Calendar({ db }) {
   });
 
   function pill(t) {
-    if (t.status === "published") return "bg-[#DFFCF0] text-[#216E4E]";
-    if (t.cetak) return "bg-[#FFF1E6] text-[#974F0C]";
-    return "bg-[#E9F2FF] text-[#0C66E4]";
+    if (t.status === "published") return "bg-[#e8f8f1] text-[#0c7a55]";
+    if (t.status === "revisi") return "bg-[#fdecec] text-[#c0362c]";
+    if (t.cetak) return "bg-[#fef5e2] text-[#9a6b0a]";
+    return "bg-[#eef0ff] text-[#4f46e5]";
   }
 
   function shiftMonth(delta) {
@@ -41,8 +42,8 @@ export default function Calendar({ db }) {
       <p className="jcrumb">Medkom 2026</p>
       <div className="mt-0.5 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h1 className="text-[24px] font-medium tracking-tight">Kalender</h1>
-          <p className="text-[13px] text-[#626F86]">Semua deadline tugas dalam sebulan. {MONTHS[cur.m]} {cur.y}.</p>
+          <h1 className="font-display text-[32px]">Kalender</h1>
+          <p className="text-[13px] text-[#6B6B6B]">Semua deadline tugas dalam sebulan. {MONTHS[cur.m]} {cur.y}.</p>
         </div>
         <div className="flex gap-1">
           <button className="jbtn h-8 px-3 text-[13px]" onClick={() => shiftMonth(-1)}>
@@ -60,8 +61,8 @@ export default function Calendar({ db }) {
         </div>
       </div>
 
-      <div className="card mt-3 overflow-hidden rounded-[8px]">
-        <div className="grid grid-cols-7 border-b border-[#DCDFE4] text-center text-[11px] font-semibold uppercase text-[#626F86]">
+      <div className="card mt-3 overflow-hidden">
+        <div className="grid grid-cols-7 border-b border-[#E8E8EC] text-center text-[11px] font-medium uppercase text-[#6B6B6B]">
           {["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"].map((d) => (
             <div key={d} className="py-2">
               {d}
@@ -72,15 +73,15 @@ export default function Calendar({ db }) {
           {cells.map((day, i) => (
             <div
               key={i}
-              className={`min-h-[64px] border-b border-r border-[#DCDFE4] p-1 align-top sm:min-h-[86px] sm:p-1.5 [&:nth-child(7n)]:border-r-0 ${
-                day === todayDate && isThisMonth ? "bg-[#E9F2FF]" : ""
+              className={`min-h-[64px] border-b border-r border-[#E8E8EC] p-1 align-top sm:min-h-[86px] sm:p-1.5 [&:nth-child(7n)]:border-r-0 ${
+                day === todayDate && isThisMonth ? "bg-[#eef0ff]" : ""
               }`}
             >
               {day && (
                 <>
                   <p
                     className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[12px] ${
-                      day === todayDate && isThisMonth ? "bg-[#0C66E4] font-bold text-white" : "text-[#44546F]"
+                      day === todayDate && isThisMonth ? "bg-[#6366F1] font-medium text-white" : "text-[#6B6B6B]"
                     }`}
                   >
                     {day}
@@ -105,8 +106,8 @@ export default function Calendar({ db }) {
           ))}
         </div>
       </div>
-      <p className="mt-2 text-[12px] text-[#626F86]">
-        Oranye = butuh cetak (deadline dimajukan H-2 di Backlog). Hijau = published.
+      <p className="mt-2 text-[12px] text-[#6B6B6B]">
+        Kuning = butuh cetak. Hijau = terbit. Merah = revisi.
       </p>
     </div>
   );

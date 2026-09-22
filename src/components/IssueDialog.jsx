@@ -2,7 +2,8 @@ import { useState } from "react";
 import { DotsThree, X } from "@phosphor-icons/react";
 import { Avatar, StatusBadge, safeHref } from "./ui.jsx";
 import { IssueTypeIcon } from "./jira.jsx";
-import { BOARD_COLS, MEMBERS, STATUSES, daysLeft } from "../lib/store.js";
+import { BOARD_COLS, STATUSES, daysLeft } from "../lib/store.js";
+import { teamMembers } from "../lib/team.js";
 
 const STATUS_LABEL = Object.fromEntries(STATUSES.map((s) => [s.id, s.label]));
 const STATUS_LOZ = {
@@ -29,6 +30,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
   const asetHref = safeHref(req?.asetMasuk?.[0]);
   const finalHref = safeHref(task.finalLink);
   const publishHref = safeHref(task.publishLink);
+  const members = teamMembers();
 
   function patch(p) {
     setDb({ ...db, tasks: db.tasks.map((t) => (t.id === task.id ? { ...t, ...p } : t)) });
@@ -44,7 +46,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
   return (
     <div className="joverlay" onClick={onClose}>
       <div
-        className="card max-h-full w-full max-w-[980px] overflow-y-auto rounded-lg shadow-[0_12px_40px_rgba(9,30,66,0.3)]"
+        className="card max-h-full w-full max-w-[980px] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 px-5 pt-4">
@@ -62,7 +64,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
         </div>
 
         <div className="px-5 pt-1">
-          <h2 className="px-2 text-[20px] font-medium">{task.title}</h2>
+          <h2 className="font-display px-2 text-[24px]">{task.title}</h2>
           <div className="mt-2 flex flex-wrap items-center gap-2 px-2">
             {isAsset && !isAdmin ? (
               <StatusBadge s={task.status} />
@@ -87,12 +89,12 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
         <div className="grid gap-6 px-5 pb-5 pt-4 md:grid-cols-[1fr_280px]">
           <div className="min-w-0">
             {preview && (
-              <img src={preview} alt={task.title} className="mb-4 w-full rounded-[8px] border border-[#DCDFE4] object-cover" />
+              <img src={preview} alt={task.title} className="mb-4 w-full rounded-[12px] border border-[#E8E8EC] object-cover" />
             )}
             <p className="lbl">Deskripsi & brief</p>
-            <div className="mt-1 text-[14px]">
+            <div className="mt-1 text-[15px]">
               <p>{req?.deskripsi || "—"}</p>
-              <p className="mt-2 text-[#44546F]">
+              <p className="mt-2 text-[#6B6B6B]">
                 Brief: {[req?.brief?.tema, req?.brief?.palet, req?.brief?.ukuran].filter(Boolean).join(" · ") || "—"}
               </p>
               {asetHref && (
@@ -102,7 +104,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
                   </a>
                 </p>
               )}
-              <p className="mt-1 text-[#44546F]">
+              <p className="mt-1 text-[#6B6B6B]">
                 Hasil akhir:{" "}
                 {finalHref ? (
                   <a className="jlink" href={finalHref} target="_blank" rel="noreferrer noopener">
@@ -128,11 +130,11 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
                 <div key={i} className="flex gap-2">
                   <Avatar name={c.by} size={32} />
                   <div className="min-w-0">
-                    <p className="text-[14px]">
-                      <span className="font-semibold">{c.by}</span>{" "}
-                      <span className="text-[12px] text-[#626F86]">{c.at}</span>
+                    <p className="text-[15px]">
+                      <span className="font-medium">{c.by}</span>{" "}
+                      <span className="text-[12px] text-[#9C9C9C]">{c.at}</span>
                     </p>
-                    <p className="mt-0.5 text-[14px]">{c.text}</p>
+                    <p className="mt-0.5 text-[15px]">{c.text}</p>
                   </div>
                 </div>
               ))}
@@ -162,7 +164,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
           </div>
 
           <div className="space-y-4">
-            <p className="rounded-[3px] border border-[#DCDFE4] px-2 py-1.5 text-[12px] font-semibold uppercase tracking-wide text-[#626F86]">
+            <p className="rounded-[8px] border border-[#E8E8EC] bg-[#FAFAFA] px-2 py-1.5 text-[11px] font-medium uppercase tracking-wide text-[#6B6B6B]">
               Detail
             </p>
             <div>
@@ -176,7 +178,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
                   disabled={!isAdmin}
                   onChange={(e) => patch({ pic: e.target.value })}
                 >
-                  {MEMBERS.map((m) => (
+                  {members.map((m) => (
                     <option key={m}>{m}</option>
                   ))}
                 </select>
@@ -214,7 +216,7 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
               </button>
             )}
             {!isAdmin && (
-              <p className="text-[12px] text-[#626F86]">Hanya Admin yang bisa menyetujui hasil akhir.</p>
+              <p className="text-[12px] text-[#6B6B6B]">Hanya Admin yang bisa menyetujui hasil akhir.</p>
             )}
           </div>
         </div>

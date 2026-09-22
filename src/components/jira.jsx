@@ -5,7 +5,7 @@ import {
   Minus,
 } from "@phosphor-icons/react";
 
-/* Blue rounded-square product mark */
+/* Indigo product mark (Genesis: primary hanya untuk interaktif) */
 export function Logo({ size = 30, letter = "M" }) {
   return (
     <span
@@ -14,8 +14,9 @@ export function Logo({ size = 30, letter = "M" }) {
         width: size,
         height: size,
         fontSize: size * 0.52,
-        background: "#0C66E4",
+        background: "#6366F1",
         borderRadius: 6,
+        fontFamily: "var(--gen-display)",
       }}
     >
       {letter}
@@ -23,29 +24,29 @@ export function Logo({ size = 30, letter = "M" }) {
   );
 }
 
-/* Jira-style issue type glyphs */
+/* Issue type glyphs (Genesis: indigo task, success story) */
 export function IssueTypeIcon({ kind = "task", size = 16 }) {
   if (kind === "story")
-    return <BookmarkSimple size={size} weight="fill" color="#36B37E" />;
-  return <CheckSquare size={size} weight="fill" color="#2684FF" />;
+    return <BookmarkSimple size={size} weight="fill" color="#10B981" />;
+  return <CheckSquare size={size} weight="fill" color="#6366F1" />;
 }
 
-/* Jira-style priority glyphs */
+/* Priority glyphs */
 export function PriorityIcon({ level = "medium", size = 14 }) {
   if (level === "highest")
-    return <CaretDoubleUp size={size} weight="bold" color="#FF5630" />;
-  return <Minus size={size} weight="bold" color="#2684FF" />;
+    return <CaretDoubleUp size={size} weight="bold" color="#EF4444" />;
+  return <Minus size={size} weight="bold" color="#6366F1" />;
 }
 
 const AVATAR_COLORS = [
-  "#0C66E4",
-  "#1F8456",
-  "#6E5DC6",
-  "#E56910",
-  "#C9372C",
-  "#227D9B",
-  "#946F00",
-  "#C2439B",
+  "#6366F1",
+  "#0A0A0A",
+  "#6B6B6B",
+  "#10B981",
+  "#F59E0B",
+  "#4F46E5",
+  "#20970B",
+  "#9C9C9C",
 ];
 
 export function avatarColor(name) {

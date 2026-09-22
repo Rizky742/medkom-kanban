@@ -101,7 +101,7 @@ export default function PublicRequest({ db, setDb, go }) {
       cetak: form.cetak,
     };
     // Kalau backend tersambung: kirim online (ID resmi dari server + file masuk Drive).
-    // Kalau tidak: simpan lokal, bisa dikirim belakangan via tombol Kirim.
+    // Kalau tidak: simpan lokal, otomatis terkirim setelah sync tersambung.
     let id = `REQ-${String(db.reqSeq).padStart(3, "0")}`;
     let code = trackCode();
     let usedSeq = true;

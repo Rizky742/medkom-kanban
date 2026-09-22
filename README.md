@@ -45,9 +45,9 @@ Untuk instal ulang / ganti backend:
 2. Jalankan `setup()` sekali → Allow → akun `medkomgenbiunair2026@gmail.com`. Ini membuat sheet `REQUESTS`/`TASKS` (di spreadsheet `MEDKOM_DB` milik script) + folder `Arsip Medkom/_APP_TRACKER/`.
 3. Deploy → New deployment → Web app → Execute as: **Me** → Who has access: **Anyone** → Deploy → copy URL `/exec`. (Catatan: deploy via UI — deploy via `clasp` tercatat tapi tidak melayani akses anonim.)
 4. Di aplikasi: sidebar → **Sambungkan ke Sheets** → tempel URL → **Tes & Simpan**. (Alternatif: isi `VITE_API_URL` di `.env` + restart dev server.)
-5. **Tarik** = ambil data Sheets (remote menang bila beda) · **Kirim** = kirim data lokal yang belum ada (ID lokal dipertahankan, ID server mulai REQ-500 agar tak tabrakan).
+5. Setelah tersambung, sinkronisasi berjalan otomatis (tiap perubahan dikirim ~2,5 detik, data terbaru ditarik tiap 30 detik / saat kembali fokus). ID lokal dipertahankan, ID server mulai REQ-500 agar tak tabrakan.
 
-Catatan v1: komentar & checklist versi cuma tersimpan lokal. File (maks 5 @20MB) hanya terkirim saat online; saat offline pakai link Drive + tombol Kirim belakangan.
+Catatan v1: komentar & checklist versi cuma tersimpan lokal. File (maks 5 @20MB) hanya terkirim saat online; saat offline pakai link Drive, file menyusul otomatis setelah online.
 
 ## Deploy gratis
 
