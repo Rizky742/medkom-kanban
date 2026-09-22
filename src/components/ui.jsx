@@ -75,3 +75,13 @@ export function Empty({ title, hint }) {
     </div>
   );
 }
+
+/* URL aman untuk <a href>: hanya http/https, tolak javascript:/data:/vbscript:.
+ * Dipakai karena link (aset, final, publish) bisa diisi user via form publik. */
+export function safeHref(u) {
+  const s = String(u || "").trim();
+  if (!s) return null;
+  if (/^(https?:\/\/|mailto:)/i.test(s)) return s;
+  if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(s)) return `https://${s}`;
+  return null;
+}

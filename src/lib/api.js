@@ -49,11 +49,24 @@ async function get(action) {
 async function post(body) {
   const url = getApiUrl();
   if (!url) throw new Error("backend belum disambungkan");
+  // Kunci tulis opsional: kalau VITE_WRITE_KEY diset (dan WRITE_KEY
+  // diset di ScriptProperties backend), ikut dikirim. Tanpa key,
+  // backend lama tetap menerima (backward compat).
+  let key = null;
+  try {
+    key =
+      typeof import.meta !== "undefined" && import.meta.env
+        ? import.meta.env.VITE_WRITE_KEY
+        : null;
+  } catch {
+    /* abaikan */
+  }
+  const payload = key ? { ...body, key: String(key) } : body;
   // text/plain agar tidak kena CORS preflight di Apps Script
   const r = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const j = await r.json();

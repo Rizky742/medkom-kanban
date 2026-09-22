@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, CheckCircle, Ticket } from "@phosphor-icons/react";
 import PortalShell from "../portal/PortalShell.jsx";
+import { safeHref } from "../components/ui.jsx";
 import { STATUSES, daysLeft, parentStatus } from "../lib/store.js";
 
 const LABEL = Object.fromEntries(STATUSES.map((s) => [s.id, s.label]));
@@ -132,11 +133,11 @@ export default function Track({ db, reqId, go }) {
                         Catatan Medkom: {c.text}
                       </p>
                     ))}
-                    {t.status === "published" && t.publishLink && (
+                    {t.status === "published" && safeHref(t.publishLink) && (
                       <a
-                        href={t.publishLink}
+                        href={safeHref(t.publishLink)}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noreferrer noopener"
                         className="portal-btn mt-2.5 px-4 py-2 text-[13px]"
                       >
                         <CheckCircle size={15} weight="bold" /> Lihat hasil tayang <ArrowRight size={14} weight="bold" />

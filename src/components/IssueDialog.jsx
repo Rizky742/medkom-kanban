@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DotsThree, X } from "@phosphor-icons/react";
-import { Avatar, StatusBadge } from "./ui.jsx";
+import { Avatar, StatusBadge, safeHref } from "./ui.jsx";
 import { IssueTypeIcon } from "./jira.jsx";
 import { BOARD_COLS, MEMBERS, STATUSES, daysLeft } from "../lib/store.js";
 
@@ -26,6 +26,9 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
   if (!task) return null;
   const req = db.requests.find((r) => r.id === task.reqId);
   const isAsset = mode === "asset";
+  const asetHref = safeHref(req?.asetMasuk?.[0]);
+  const finalHref = safeHref(task.finalLink);
+  const publishHref = safeHref(task.publishLink);
 
   function patch(p) {
     setDb({ ...db, tasks: db.tasks.map((t) => (t.id === task.id ? { ...t, ...p } : t)) });
@@ -92,25 +95,25 @@ export default function IssueDialog({ db, setDb, taskId, onClose, me, isAdmin, p
               <p className="mt-2 text-[#44546F]">
                 Brief: {[req?.brief?.tema, req?.brief?.palet, req?.brief?.ukuran].filter(Boolean).join(" · ") || "—"}
               </p>
-              {req?.asetMasuk?.[0] && (
+              {asetHref && (
                 <p className="mt-1">
-                  <a className="jlink" href={req.asetMasuk[0]} target="_blank" rel="noreferrer">
+                  <a className="jlink" href={asetHref} target="_blank" rel="noreferrer noopener">
                     Aset masuk dari pemohon
                   </a>
                 </p>
               )}
               <p className="mt-1 text-[#44546F]">
                 Hasil akhir:{" "}
-                {task.finalLink ? (
-                  <a className="jlink" href={task.finalLink} target="_blank" rel="noreferrer">
+                {finalHref ? (
+                  <a className="jlink" href={finalHref} target="_blank" rel="noreferrer noopener">
                     buka Drive
                   </a>
                 ) : (
                   "belum ada"
                 )}
                 {" · "}Link tayang:{" "}
-                {task.publishLink ? (
-                  <a className="jlink" href={task.publishLink} target="_blank" rel="noreferrer">
+                {publishHref ? (
+                  <a className="jlink" href={publishHref} target="_blank" rel="noreferrer noopener">
                     lihat
                   </a>
                 ) : (

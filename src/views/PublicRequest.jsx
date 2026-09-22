@@ -66,13 +66,23 @@ export default function PublicRequest({ db, setDb, go }) {
       alert("Lengkapi Divisi, PIC, Nama Proker, dan Deadline dulu ya.");
       return;
     }
+    const asetTrim = String(form.aset || "").trim();
+    if (asetTrim && !/^https:\/\//i.test(asetTrim)) {
+      alert("Link aset harus diawali https:// (tempel link Drive).");
+      return;
+    }
     if (files.length > 5) {
       alert("Maksimal 5 file.");
       return;
     }
+    const ALLOWED_MIME = ["image/", "video/", "application/pdf"];
     for (const f of files) {
       if (f.size > 20 * 1024 * 1024) {
         alert(`File ${f.name} lebih dari 20MB.`);
+        return;
+      }
+      if (!ALLOWED_MIME.some((p) => (f.type || "").startsWith(p))) {
+        alert(`File ${f.name} tidak didukung. Hanya gambar, video, atau PDF.`);
         return;
       }
     }
@@ -84,7 +94,7 @@ export default function PublicRequest({ db, setDb, go }) {
       jenis: [form.jenis],
       deskripsi: form.deskripsi,
       brief: { tema: form.tema, palet: form.palet, ukuran: form.ukuran, referensi: form.referensi, larangan: "" },
-      asetMasuk: form.aset ? [form.aset] : [],
+      asetMasuk: asetTrim ? [asetTrim] : [],
       deadlineAcara: form.deadline,
       createdAt: todayLocal(),
       publishTarget: [form.publish],

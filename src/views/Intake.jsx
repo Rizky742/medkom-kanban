@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
-import { Avatar, DueText, Empty, StatusBadge } from "../components/ui.jsx";
+import { Avatar, DueText, Empty, StatusBadge, safeHref } from "../components/ui.jsx";
 import { IssueTypeIcon } from "../components/jira.jsx";
 import IssueDialog from "../components/IssueDialog.jsx";
 import { MEMBERS, daysLeft, parentStatus } from "../lib/store.js";
@@ -122,10 +122,10 @@ export default function Intake({ db, setDb, me, isAdmin }) {
               </div>
               <p className="border-t border-[#DCDFE4] px-3 py-2 text-[13px] text-[#44546F]">
                 PIC {r.pic} ({r.wa}) · {r.jenis.join(", ")} · {r.deskripsi}
-                {r.asetMasuk.length > 0 && (
+                {r.asetMasuk.length > 0 && safeHref(r.asetMasuk[0]) && (
                   <>
                     {" "}·{" "}
-                    <a className="jlink" href={r.asetMasuk[0]} target="_blank" rel="noreferrer">
+                    <a className="jlink" href={safeHref(r.asetMasuk[0])} target="_blank" rel="noreferrer noopener">
                       aset masuk
                     </a>
                   </>
