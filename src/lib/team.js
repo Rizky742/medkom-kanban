@@ -4,7 +4,7 @@
 
 import { ADMINS as DEFAULT_ADMINS, MEMBERS as DEFAULT_MEMBERS } from "./store.js";
 
-const TEAM_KEY = "medkom_team_v1";
+const TEAM_KEY = "medkom_team_v2";
 
 function envPin(key, fallback) {
   try {

@@ -256,7 +256,7 @@ export default function PublicRequest({ db, setDb, go }) {
                 <PField label="Nama proker *" hint="cth: WEeBI 2026">
                   <input className="portal-input" value={form.proker} onChange={(e) => set("proker", e.target.value)} />
                 </PField>
-                <PField label="PIC *" hint="Nama + kontak WA, cth: Dika (0858…)">
+                <PField label="PIC *" hint="Nama + kontak WA, cth: Sabriena (0858…)">
                   <input className="portal-input" value={form.pic} onChange={(e) => set("pic", e.target.value)} />
                 </PField>
                 <PField label="No WA" hint="Buat verifikasi kalau brief kurang jelas">

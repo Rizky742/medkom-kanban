@@ -7,12 +7,17 @@ export const MEMBERS = [
   "Vita",
   "Fayola",
   "Lina",
+  "Sabriena",
   "Sovia",
   "Hannara",
-  "Dika",
-  "Mutiara",
-  "Celine",
-  "Syahwa",
+  "Ocha",
+  "Syalina",
+  "Dhamar",
+  "Ayla",
+  "Marsya",
+  "Aisyah",
+  "Kansa",
+  "Zahwa",
 ];
 
 export const STATUSES = [
